@@ -15,6 +15,16 @@ pipeline {
                 }
             }
         }
+        stage('Static Code Analysis') {
+        environment {
+        SONAR_URL = "http://65.0.204.6:9000"
+      }
+      steps {
+        withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
+          sh 'cd/var/lib/jenkins/workspace/php && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
+        }
+      }
+    }
           stage('Docker login') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-cred', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
