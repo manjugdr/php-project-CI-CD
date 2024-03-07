@@ -24,9 +24,7 @@ pipeline {
           sh 'cd/var/lib/jenkins/workspace/php && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
         }
       }
-    }
-    }
-          stage('Docker login') {
+              stage('Docker login') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-cred', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                     sh "echo $PASS | docker login -u $USER --password-stdin"
