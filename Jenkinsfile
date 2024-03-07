@@ -10,7 +10,7 @@ pipeline {
         stage('Build docker image'){
             steps{
                 script{
-                    sh 'docker build -t manjugdr/2febimg:v2 .'
+                    sh 'docker build -t manjugdr/2febimg:v3 .'
                     sh 'docker images'
                 }
             }
@@ -26,9 +26,9 @@ pipeline {
       }
               stage('Docker login') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-cred', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-pwd', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                     sh "echo $PASS | docker login -u $USER --password-stdin"
-                    sh 'docker push manjugdr/2febimg:v2'
+                    sh 'docker push manjugdr/2febimg:v3'
                 }
             }
         }
@@ -40,9 +40,9 @@ pipeline {
                     def dockerCmd = 'sudo docker run -itd --name My-first-containe221 -p 8082:80 manjugdr/2febimg:v2'
                     sshagent(['sshkeypair']) {
                         //chnage the private ip in below code
-                        // sh "docker run -itd --name My-first-containe211 -p 8082:80 manjugdr/2febimg:v1"
-                         sh "ssh -o StrictHostKeyChecking=no ubuntu@172.31.44.169 ${dockerrm}"
-                         sh "ssh -o StrictHostKeyChecking=no ubuntu@172.31.44.169 ${dockerCmd}"
+                        // sh "docker run -itd --name My-first-containe211 -p 8082:80 manjugdr/2febimg:v3"
+                         sh "ssh -o StrictHostKeyChecking=no ubuntu@3.90.162.153 ${dockerrm}"
+                         sh "ssh -o StrictHostKeyChecking=no ubuntu@3.90.162.153 ${dockerCmd}"
                     }
                 }
             }
